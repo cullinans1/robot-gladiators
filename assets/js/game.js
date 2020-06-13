@@ -3,26 +3,34 @@
 //  *Fight all enemy robots
 //  *Defeat each enemy robot
 // "LOSE" - player robots health is zero or less
-
+var fightOrSkip = function() {
+    //Asking if player wants to fight or skip
+    var promptFight = window.prompt("Would you like to fight or skip this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    if (!promptFight || promptFight === " ") {
+        alert("You need to provide an answer! Please try again");
+        return fightOrSkip();
+    }
+    promptFight = promptFight.toLowerCase();
+    if (promptFight === "skip" || promptFight === "SKIP") {
+    //confirming player wants to quit
+        var confirmSkip = window.confirm("Are you sure you want to quit?");
+    //if yes (true), leave fight
+        if (confirmSkip) {
+        window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+        //subtract money from player
+        playerInfo.money = Math.max(0, playerInfo.money - 15);
+        return true;
+        }
+    }
+    return false;
+}
 var fight = function(enemy) {
     console.log(enemy)
     //repeat and execute as long as enemy robot is alive
     while(enemy.health > 0 && playerInfo.health > 0) {
-            //Asking if player wants to fight or skip
-    var promptFight = window.prompt("Would you like to fight or skip this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-
-        if (promptFight === "skip" || promptFight === "SKIP") {
-        //confirming player wants to quit
-        var confirmSkip = window.confirm("Are you sure you want to quit?");
-        //if yes (true), leave fight
-        if (confirmSkip) {
-            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-            //subtract money from player
-            playerInfo.money = Math.max(0, playerInfo.money - 15);
-            console.log("playerInfo.money", playerInfo.money);
+        if (fightOrSkip()) {
             break;
         }
-    }
         //Subtract the value of playerInfo.attack from the value of enemy.health and use that result to update the value in enemy.healthvar
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         enemy.health = Math.max(0, enemy.health - damage);
